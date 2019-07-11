@@ -111,8 +111,7 @@ public:
         // no more column constraints; complete solution
         if(head->right == head) {
             solved = true;
-            std::cout << "Done" << "\n";
-            debug_printSol();
+            //debug_printSol();
             return;
         }
         else {
@@ -257,6 +256,20 @@ public:
         }
 
         this->DLXMatrix = DLXMatrix;
+    }
+
+    // displays solution in SIZE x SIZE matrix
+    void displaySolvedGrid() {
+        int solvedGrid[SIZE][SIZE];
+        for(auto sol: infoSol) {
+            solvedGrid[std::get<0>(sol) - 1][std::get<1>(sol) - 1] = std::get<2>(sol);
+        }
+        for(uint8_t r = 0; r < SIZE; r++) {
+            for(uint8_t c = 0; c < SIZE; c++) {
+                std::cout << solvedGrid[r][c] << " ";
+            }
+            std::cout << "\n";
+        }
     }
 
     // 15kb leak, hope you're fine with that
