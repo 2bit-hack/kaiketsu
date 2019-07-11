@@ -11,8 +11,8 @@ and [Dancing Links](https://en.wikipedia.org/wiki/Dancing_Links "dancing links")
 - [X] Implement dancing links data structure
 - [X] Convert from sudoku grid to sparse matrix
 - [X] Implement Algorithm X
-- [] Display solved sudoku
-- [] File handling to generate sudoku
-- [] Clean up fully
+- [ ] Display solved sudoku
+- [ ] File handling to generate sudoku
+- [ ] Clean up fully
 
 
