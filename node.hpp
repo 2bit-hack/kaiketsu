@@ -37,11 +37,12 @@ public:
     Node* head = new Node(-1, -1, -1);
     std::vector<std::tuple<int, int, int>> infoSol;
     std::vector<Node*> toCover;
-    bool solved = false;
+    bool solved;
+    // required for cleanup
+    std::vector<Node*> coveredCols;
 
     // returns pointer to smallest column for S-heuristic
     Node* getSmallestCol() {
-        //std::cout << "Trying to get smallest col" << "\n";
         int min = __INT_MAX__;
         Node* minNode = nullptr;
         for(Node* cNode = head->right; cNode != head; cNode = cNode->right) {
@@ -50,7 +51,6 @@ public:
                 minNode = cNode;
             }
         }
-        //std::cout << "Succeeded minCol size: " << minNode->size << "\n";
         return minNode;
     }
 
@@ -93,7 +93,7 @@ public:
     void uncover(Node* node) {
         // uncover every node row below column node
         for(Node* n1 = node->up; n1 != node; n1 = n1->up) {
-            for(Node* n2 = node->left; n2 != n1; n2 = n2->left) {
+            for(Node* n2 = n1->left; n2 != n1; n2 = n2->left) {
                 n2->cHead->size++;
                 n2->up->down = n2;
                 n2->down->up = n2;
@@ -104,28 +104,29 @@ public:
         node->right->left = node;
     }
 
-    void solve() {
-        if(solved) {
-            return;
-        }
+    bool solve() {
+
+        // if(solved)
+        //     return;
+
         // no more column constraints; complete solution
         if(head->right == head) {
-            solved = true;
-            //debug_printSol();
-            return;
+            // solved = true;
+            return true;
         }
         else {
             // choose smallest column; S-heuristic
             Node* currCol = getSmallestCol();
             // column constraint has no solution!
+
             if(currCol->size == 0) {
-                solved = true;
-                std::cout << "No solution" << "\n";
-                return;
+                return false;
             }
+
             // add to existing solution and remove column
             // and associated rows
             cover(currCol);
+            coveredCols.push_back(currCol);
 
             // for every row in current column
             for(Node* rowNode = currCol->down; rowNode != currCol;
@@ -137,13 +138,14 @@ public:
                 otherColNode = otherColNode->right) {
                     // cover those columns
                     cover(otherColNode->cHead);
+                    coveredCols.push_back(otherColNode->cHead);
                 }
                 // recursively solve on reduced structure
-                solve();
+                if(solve())
+                    return true;
 
-                if(solved) {
-                    return;
-                }
+                // if(solved)
+                //     return;
 
                 // nope, doesn't work :(
                 // remove from partial solution
@@ -152,14 +154,12 @@ public:
                 for(Node* otherColNode = rowNode->left; otherColNode != rowNode;
                 otherColNode = otherColNode->left) {
                     uncover(otherColNode->cHead);
+                    coveredCols.pop_back();
                 }
             }
-
-            if(solved) {
-                return;
-            }
-
             uncover(currCol);
+            coveredCols.pop_back();
+            return false;
         }
     }
 
@@ -197,7 +197,7 @@ public:
                     colConst->right = boxConst;
                     boxConst->left = colConst;
                     boxConst->right = cellConst;
-                    
+
                     continue;
                 }
                 // else generate 9 rows
@@ -248,10 +248,12 @@ public:
         // cover all the given values
         for(Node* rowNode: toCover) {
             cover(rowNode->cHead);
+            coveredCols.push_back(rowNode->cHead);
             infoSol.push_back(rowNode->info);
             for(Node* otherColNode = rowNode->right; otherColNode != rowNode;
                 otherColNode = otherColNode->right) {
                     cover(otherColNode->cHead);
+                    coveredCols.push_back(otherColNode->cHead);
             }
         }
 
@@ -260,53 +262,47 @@ public:
 
     // displays solution in SIZE x SIZE matrix
     void displaySolvedGrid() {
-        int solvedGrid[SIZE][SIZE];
-        for(auto sol: infoSol) {
-            solvedGrid[std::get<0>(sol) - 1][std::get<1>(sol) - 1] = std::get<2>(sol);
-        }
-        for(uint8_t r = 0; r < SIZE; r++) {
-            for(uint8_t c = 0; c < SIZE; c++) {
-                std::cout << solvedGrid[r][c] << " ";
+        if(solved) {
+            int solvedGrid[SIZE][SIZE];
+            for(auto sol: infoSol) {
+                solvedGrid[std::get<0>(sol) - 1][std::get<1>(sol) - 1] = std::get<2>(sol);
             }
-            std::cout << "\n";
+            for(uint8_t r = 0; r < SIZE; r++) {
+                for(uint8_t c = 0; c < SIZE; c++) {
+                    std::cout << solvedGrid[r][c] << " ";
+                }
+                std::cout << "\n";
+            }
         }
+        else
+            std::cout << "No solutions found!\n";
     }
 
-    // 15kb leak, hope you're fine with that
+    // cleanup time
     ~DancingLinks() {
         for(auto nodeRow: DLXMatrix) {
             for(auto node: nodeRow) {
                 delete node;
             }
         }
-        for(Node* node = head->right; node != head; node = node->right) {
-            delete node;
+
+        if(solved) {
+            for(auto colNode: coveredCols) {
+                delete colNode;
+            }
         }
+
         delete head;
     }
 
-    // debug print matrix
-    //     for(auto nodeRow: DLXMatrix) {
-    //         for(auto node: nodeRow) {
-    //             if(node == nullptr) {
-    //                 std::cout << 0 << " ";
-    //             }
-    //             else {
-    //                 std::cout << 1 << " ";
-    //             }
-    //         }
-    //         std::cout << "\n";
-    //     }
-    
-
     // debug functions go here
 
-    void debug_numCols() {
+    int debug_numCols() {
         int counter = 0;
         for(Node* n = head->right; n != head; n = n->right) {
             counter++;
         }
-        std::cout << counter << "\n";
+        return counter;
     }
 
     void debug_numSols() {
