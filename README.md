@@ -7,7 +7,7 @@ and [Dancing Links](https://en.wikipedia.org/wiki/Dancing_Links "dancing links")
 
 The original paper can be found [here](https://arxiv.org/abs/cs/0011047 "dlx paper").
 
-This project uses [rang](https://github.com/agauniyal/rang, "rang") to provide colors in terminal.
+This project uses [rang](https://github.com/agauniyal/rang "rang") to provide colors in terminal.
 Huge props to the author!
 
 ## Usage
