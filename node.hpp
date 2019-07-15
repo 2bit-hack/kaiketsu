@@ -3,9 +3,26 @@
 #define NODE_H
 
 #include "defines.hpp"
+#include "rang.hpp"
 #include <iostream>
 #include <vector>
 #include <tuple>
+
+// util functions
+uint8_t getDigitCount(uint8_t x) {
+    uint8_t count = 0;
+    while(x != 0) {
+        x = x / 10;
+        count++;
+    }
+    return count;
+}
+
+void printnSpaces(uint8_t n) {
+    while(n--) {
+        std::cout << " ";
+    }
+}
 
 // circularly connected to four directions
 // also connected to node that identifies column
@@ -262,20 +279,31 @@ public:
 
     // displays solution in SIZE x SIZE matrix
     void displaySolvedGrid() {
+        std::cout << "\n";
         if(solved) {
             int solvedGrid[SIZE][SIZE];
             for(auto sol: infoSol) {
                 solvedGrid[std::get<0>(sol) - 1][std::get<1>(sol) - 1] = std::get<2>(sol);
             }
             for(uint8_t r = 0; r < SIZE; r++) {
+                if(r % SIZE_RT == 0 && r != 0) {
+                    for(uint8_t i = 0; i < (2 * SIZE) + SIZE_RT + ((getDigitCount(SIZE)-1)*SIZE); i++) {
+                        std::cout << rang::fgB::green << "-";
+                    }
+                    std::cout << "\n";
+                }
                 for(uint8_t c = 0; c < SIZE; c++) {
-                    std::cout << solvedGrid[r][c] << " ";
+                    if(c % SIZE_RT == 0 && c != 0) {
+                        std::cout << rang::fgB::green <<  "| ";
+                    }
+                    std::cout << rang::fgB::gray << solvedGrid[r][c] << " ";
+                    printnSpaces(getDigitCount(SIZE) - getDigitCount(solvedGrid[r][c]));
                 }
                 std::cout << "\n";
             }
         }
         else
-            std::cout << "No solutions found!\n";
+            std::cout << rang::fgB::red << "No solutions found!\n\n";
     }
 
     // cleanup time
@@ -316,8 +344,5 @@ public:
         }
     }
 };
-
- 
-
 
 #endif

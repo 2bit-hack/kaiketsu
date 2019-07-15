@@ -1,4 +1,5 @@
 #include "node.hpp"
+#include <chrono>
 
 int main() {
     // for now, change this to partially solved sudoku grid
@@ -10,10 +11,15 @@ int main() {
                                                     {0, 0, 7, 0, 0, 0, 5, 8, 0},
                                                     {0, 0, 0, 0, 6, 7, 0, 0, 0},
                                                     {0, 1, 0, 0, 0, 4, 0, 0, 0},
-                                                    {5, 2, 0, 0, 0, 0, 0, 0, 0}};  
+                                                    {5, 2, 0, 0, 0, 0, 0, 0, 0}};   
     DancingLinks dl;
+    auto start = std::chrono::high_resolution_clock::now();
     dl.createDLXMatrix(sudokuGrid);
     dl.solved = dl.solve();
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> total = finish - start;
     dl.displaySolvedGrid();
+    if(dl.solved)
+        std::cout << "\nTime taken: " << rang::fgB::green << total.count() << rang::fgB::gray << "s\n";
     return 0;
 }
