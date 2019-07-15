@@ -2,7 +2,7 @@
 
 Kaiketsu is a (relatively) fast sudoku solver written in C++
 
-![kaiketsu](https://github.com/2bit-hack/kaiketsu/img/kaiket2.png "kaiketsu")
+![kaiketsu](https://github.com/2bit-hack/kaiketsu/blob/master/img/kaiket2.png "kaiketsu")
 
 It implements Donald Knuth's [Algorithm X](https://en.wikipedia.org/wiki/Knuth%27s_Algorithm_X "algo x")
 and [Dancing Links](https://en.wikipedia.org/wiki/Dancing_Links "dancing links").
