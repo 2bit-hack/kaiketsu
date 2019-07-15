@@ -181,7 +181,7 @@ public:
     }
 
     // creates DLX matrix from original SIZE x SIZE sudoku grid
-    void createDLXMatrix(std::vector<std::vector<uint8_t>> sudokuGrid) {
+    void createDLXMatrix(const std::vector<std::vector<uint8_t>>& sudokuGrid) {
         int matrixRow = 0;
         std::vector<std::vector<Node*>> DLXMatrix(MAX_ROWS, std::vector<Node*>(MAX_COLS, nullptr));
         Node *cellConst, *rowConst, *colConst, *boxConst;
@@ -278,7 +278,7 @@ public:
     }
 
     // displays solution in SIZE x SIZE matrix
-    void displaySolvedGrid() {
+    void displaySolvedGrid(const std::vector<std::vector<uint8_t>>& sudokuGrid) {
         std::cout << "\n";
         if(solved) {
             int solvedGrid[SIZE][SIZE];
@@ -296,7 +296,10 @@ public:
                     if(c % SIZE_RT == 0 && c != 0) {
                         std::cout << rang::fgB::green <<  "| ";
                     }
-                    std::cout << rang::fgB::gray << solvedGrid[r][c] << " ";
+                    if(sudokuGrid[r][c] == 0)
+                        std::cout << rang::fgB::gray << solvedGrid[r][c] << " ";
+                    else
+                        std::cout << rang::fgB::cyan << solvedGrid[r][c] << " ";
                     printnSpaces(getDigitCount(SIZE) - getDigitCount(solvedGrid[r][c]));
                 }
                 std::cout << "\n";

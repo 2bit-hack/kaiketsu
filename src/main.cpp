@@ -18,7 +18,7 @@ int main() {
     dl.solved = dl.solve();
     auto finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> total = finish - start;
-    dl.displaySolvedGrid();
+    dl.displaySolvedGrid(sudokuGrid);
     if(dl.solved)
         std::cout << "\nTime taken: " << rang::fgB::green << total.count() << rang::fgB::gray << "s\n";
     return 0;
