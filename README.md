@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # kaiketsu
 
 Kaiketsu is a (relatively) fast sudoku solver written in C++
