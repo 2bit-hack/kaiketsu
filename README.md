@@ -16,6 +16,8 @@ Huge props to the author!
 
 Some puzzles can be found [here](https://sudoku.com/ "puzzles").
 
+So far, 9X9 and 16X16 puzzles have been tested.
+
 ## Usage
 
 In `main.cpp`, modify partial sudoku puzzle and save
