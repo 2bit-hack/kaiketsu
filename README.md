@@ -14,6 +14,8 @@ The original paper can be found [here](https://arxiv.org/abs/cs/0011047 "dlx pap
 This project uses [rang](https://github.com/agauniyal/rang "rang") to provide colors in terminal.
 Huge props to the author!
 
+Some puzzles can be found [here](https://sudoku.com/ "puzzles").
+
 ## Usage
 
 In `main.cpp`, modify partial sudoku puzzle and save
