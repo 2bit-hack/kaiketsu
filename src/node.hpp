@@ -49,8 +49,8 @@ struct Node {
 class DancingLinks {
 
 public:
-    // the header to the col headers(main header)
     std::vector<std::vector<Node*>> DLXMatrix;
+    // the header to the col headers(main header)
     Node* head = new Node(-1, -1, -1);
     std::vector<std::tuple<int, int, int>> infoSol;
     std::vector<Node*> toCover;
@@ -93,6 +93,7 @@ public:
         }
     }
 
+    // cover column node and associated rows
     void cover(Node* node) {
         // cover column node
         node->right->left = node->left;
@@ -107,6 +108,7 @@ public:
         }
     }
 
+    // uncover column node and associated rows
     void uncover(Node* node) {
         // uncover every node row below column node
         for(Node* n1 = node->up; n1 != node; n1 = n1->up) {
@@ -123,12 +125,8 @@ public:
 
     bool solve() {
 
-        // if(solved)
-        //     return;
-
         // no more column constraints; complete solution
         if(head->right == head) {
-            // solved = true;
             return true;
         }
         else {
@@ -160,9 +158,6 @@ public:
                 // recursively solve on reduced structure
                 if(solve())
                     return true;
-
-                // if(solved)
-                //     return;
 
                 // nope, doesn't work :(
                 // remove from partial solution
@@ -287,7 +282,8 @@ public:
             }
             for(uint8_t r = 0; r < SIZE; r++) {
                 if(r % SIZE_RT == 0 && r != 0) {
-                    for(uint8_t i = 0; i < (2 * SIZE) + SIZE_RT + ((getDigitCount(SIZE)-1)*SIZE); i++) {
+                    for(uint8_t i = 0; i < (2 * SIZE) + SIZE_RT
+                    + ((getDigitCount(SIZE)-1)*SIZE) + getDigitCount(SIZE)-1; i++) {
                         std::cout << rang::fgB::green << "-";
                     }
                     std::cout << "\n";

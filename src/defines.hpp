@@ -2,8 +2,8 @@
 #define DEFINES_H
 
 // change these to change dimensions of puzzle
-#define SIZE 9
-#define SIZE_RT 3
+#define SIZE 16
+#define SIZE_RT 4
 
 // do not change these
 #define MAX_ROWS SIZE*SIZE*SIZE
